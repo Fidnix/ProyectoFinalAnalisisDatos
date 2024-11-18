@@ -133,7 +133,7 @@ markdown-it-py @ file:///work/perseverance-python-buildout/croot/markdown-it-py_
 MarkupSafe @ file:///work/perseverance-python-buildout/croot/markupsafe_1707342994941/work
 matplotlib @ file:///croot/matplotlib-suite_1713336378214/work
 matplotlib-inline @ file:///work/perseverance-python-buildout/croot/matplotlib-inline_1698864771271/work
-mccabe @ file:///opt/conda/conda-blconda create -n envname python=x.x anacondad/mccabe_1644221741721/work
+mccabe @ file:///opt/conda/conda-bld/mccabe_1644221741721/work
 mdit-py-plugins @ file:///work/perseverance-python-buildout/croot/mdit-py-plugins_1698895393342/work
 mdurl @ file:///work/perseverance-python-buildout/croot/mdurl_1698845653285/work
 mistune @ file:///work/perseverance-python-buildout/croot/mistune_1698895588147/work
