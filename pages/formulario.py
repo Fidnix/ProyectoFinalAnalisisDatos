@@ -1,4 +1,5 @@
 import streamlit as st
+from utils.crear_reporte import crear_reporte
 import numpy as np
 
 # Modal para mostrar los resultados de la prediccion
@@ -16,13 +17,21 @@ def modal_prediccion(d):
         st.success("El cliente es apto para el crédito")
     else:
         st.error("El cliente no es apto para el crédito")
+    
+    pdf_bytes = crear_reporte(datos_credito, resultado_prediccion)
 
     col_cerrar, col_imprimir = st.columns(2)
     with col_cerrar:
         if st.button("Cerrar", use_container_width=True):
             st.rerun()
     with col_imprimir:
-        # st.download_button("Imprimir reporte", use_container_width=True)
+        st.download_button(
+            "Imprimir reporte",
+            data=pdf_bytes,
+            file_name=f"reporte-credito-{datos_credito["nombre_cliente"]}.pdf",
+            mime="application/pdf",
+            use_container_width=True
+        )
         pass
 
 datos_credito = {
@@ -156,7 +165,7 @@ with st.container(border=True):
         # cb_person_cred_hist_length
         # "Longitud del historial crediticio del individuo"
         datos_credito["cb_person_cred_hist_length"] = st.number_input(
-            "Ingrese total de años de actividad de créditos del individuo (años) ",
+            "Ingrese total de años de actividad de créditos del individuo",
             min_value=0,
             max_value=100,
             value=1,
