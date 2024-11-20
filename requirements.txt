@@ -65,6 +65,7 @@ filelock @ file:///work/perseverance-python-buildout/croot/filelock_170173399313
 flake8 @ file:///croot/flake8_1708965256870/work
 Flask @ file:///croot/flask_1716545870149/work
 fonttools @ file:///croot/fonttools_1713551344105/work
+fpdf==1.7.2
 frozenlist @ file:///work/perseverance-python-buildout/croot/frozenlist_1698886842990/work
 fsspec @ file:///croot/fsspec_1714461537038/work
 gensim @ file:///work/perseverance-python-buildout/croot/gensim_1698886961185/work
@@ -268,7 +269,6 @@ sphinxcontrib-serializinghtml @ file:///croot/sphinxcontrib-serializinghtml_1718
 spyder @ file:///croot/spyder_1710523693130/work
 spyder-kernels @ file:///croot/spyder-kernels_1707937713588/work
 SQLAlchemy @ file:///croot/sqlalchemy_1718378176902/work
-st-pages==1.0.1
 stack-data @ file:///opt/conda/conda-bld/stack_data_1646927590127/work
 statsmodels @ file:///croot/statsmodels_1718381181899/work
 streamlit==1.40.1
