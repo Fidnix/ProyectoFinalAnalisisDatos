@@ -4,6 +4,15 @@ Este es un proyecto para el curso de análisis de datos de la PUCP, este proyect
 
 Este proyecto es un Dashboard para analizar las características que tienen ciertos atributos que influyen en la decisión de si una persona obtiene un crédito o no.
 
+## Integrantes
+
+* Daniel Ganoza Chavez (20196030)
+* Javier Tocto Sanchez (20161672)
+* Daniel Arturo Castillo Rios (20171658) 
+* Fidel Moisés Apari Sánchez (20212126)
+
+[Link al dataset](https://www.kaggle.com/datasets/laotse/credit-risk-dataset)
+
 # Índice
 
 * **Instalación**: Este proyecto tendrá dos formas de instalación conforme usted se sienta más cómodo, preferiblemente se usará venv
@@ -82,9 +91,17 @@ Los venv, también llamados ambientes virtuales permiten aislar la versión de p
 
 # Estructura del proyecto
 
+* data: Almacena los datos que se usarán en el proyecto
+* pages: Directorio con páginas en extesnión .py. Ahí se encuentran las páginas de streamlit
+    * datos.py: Para dar un vistazo a los datos actuales
+    * visual.py: Aun no tiene propósito claro, pero se relacionará con el modelo final
+    * formulario.py: Archivo para predecir el resultado de un registro, permitirá imprimir el resultado
+* utils: Tiene métodos para usar dentro de pages
+    * crear_reporte: Permite crear el resporte necesario para formulario.py
 * app.py: Es el archivo principal que ejecuta la navegación de las páginas
-* pages.toml: Organiza y contiene las páginas de pages
-* pages: Directorio con páginas en extesnión .py
+* .gitignore: Ignora ciertos archivos innecesarios como archivos de cache
+* requirements.txt: Contiene las librerías necesarias para el proyecto
+* README.md: Lo estás leyendo capo
 
 # Cómo contribuir
 
@@ -133,6 +150,9 @@ Este siguiente link es para conectare y que puedan usar el repositorio remoto, e
 [Video para conectarse con tokens](https://www.youtube.com/watch?v=2nzOI-ynXF4)
 
 ### Pasos iniciales
+
+> [!IMPORTANT]
+> Usar **Git Bash**
 
 Dependiendo de cómo te autenticaste en github, requerirás usar uno de los siguientes comandos:
 
