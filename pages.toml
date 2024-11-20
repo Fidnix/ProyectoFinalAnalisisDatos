@@ -4,6 +4,16 @@ name = "Introducción"
 icon = "🏠"
 
 [[pages]]
+path = "pages/datos.py"
+name = "Sobre los datos"
+icon = "📃"
+
+[[pages]]
 path = "pages/visual.py"
 name = "Visualización"
 icon = "👀"
+
+[[pages]]
+path = "pages/formulario.py"
+name = "Pruebas de formulario"
+icon = "📜"
