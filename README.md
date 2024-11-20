@@ -4,6 +4,15 @@ Este es un proyecto para el curso de análisis de datos de la PUCP, este proyect
 
 Este proyecto es un Dashboard para analizar las características que tienen ciertos atributos que influyen en la decisión de si una persona obtiene un crédito o no.
 
+## Integrantes
+
+* Daniel Ganoza Chavez (20196030)
+* Javier Tocto Sanchez (20161672)
+* Daniel Arturo Castillo Rios (20171658) 
+* Fidel Moisés Apari Sánchez (20212126)
+
+[Link al dataset](https://www.kaggle.com/datasets/laotse/credit-risk-dataset)
+
 # Índice
 
 * **Instalación**: Este proyecto tendrá dos formas de instalación conforme usted se sienta más cómodo, preferiblemente se usará venv
