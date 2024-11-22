@@ -26,13 +26,13 @@ class CustomPDF(FPDF):
     def add_image(self, image_path, x, y, w, h):
         self.image(image_path, x=x, y=y, w=w, h=h)
 
-def crear_reporte(datos_credito, estado_aprobado):
+def crear_reporte(datos_aparte, datos_credito, estado_aprobado):
     pdf = CustomPDF()
     pdf.add_page()
 
     # Datos
     datos_personales = f"""
-Nombre: {datos_credito["nombre_cliente"]}
+Nombre: {datos_aparte["nombre_cliente"]}
 Edad: {datos_credito["person_age"]} años
 Sueldo anual: s/. {datos_credito["person_income"]}
 Tipo de residencia: {datos_credito["person_home_ownership"]}
@@ -56,7 +56,7 @@ Ingrese total de años de actividad de créditos del individuo: {datos_credito["
     pdf.add_section("Datos del historial crediticio", 10, 190, 190, 40, historial_crediticio)
 
     # Imagen de perfil
-    pdf.image( Image.open(io.BytesIO(datos_credito["imagen_cliente"])), x=130, y=50, w=40,h=40 )
+    pdf.image( Image.open(io.BytesIO(datos_aparte["imagen_cliente"])), x=130, y=50, w=40,h=40 )
 
     # Agregar contenedor de aprobación
     if estado_aprobado:

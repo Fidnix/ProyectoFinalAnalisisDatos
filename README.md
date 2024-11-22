@@ -229,14 +229,12 @@ El siguiente video explica más características de Git, así que solo enfocate 
 
 # Cómo añadir páginas
 
-> Para esto, se usa la herramienta st-pages que es un plugin de streamlit
-
 Para añadir páginas, usa la carpeta pages y añade el archivo que quieres definir como página.
-Luego añade en pages.toml las líneas de configuración de la página:
+Luego añade en app.py las líneas de configuración de la página:
 
-```toml
-[[pages]]
-path = "pages/archivo...py"
-name = "Nombre de la página que quieres añadir"
-icon = "👀"
+```python
+pages = [
+    ...,
+    st.Page(ruta_pagina, title=nombre_pagina),
+]
 ```
