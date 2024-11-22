@@ -3,22 +3,26 @@ from utils.crear_reporte import crear_reporte
 import numpy as np
 
 # Modal para mostrar los resultados de la prediccion
+@st.cache_data
+def obtener_prediccion(datos_creditos):
+    return np.random.randn() > 0.5
+
 @st.dialog("Resultados de predicción")
-def modal_prediccion(d):
-    st.title(datos_credito["nombre_cliente"])
+def modal_prediccion(datos_aparte, datos_credito):
+    st.title(datos_aparte["nombre_cliente"])
     st.image(
-        datos_credito["imagen_cliente"],
+        datos_aparte["imagen_cliente"],
         width = 120
     )
 
     # Evaluacion por el modelo (Por cambiar)
-    resultado_prediccion = np.random.randn() > 0.5
+    resultado_prediccion = obtener_prediccion(datos_credito)
     if resultado_prediccion:
         st.success("El cliente es apto para el crédito")
     else:
         st.error("El cliente no es apto para el crédito")
     
-    pdf_bytes = crear_reporte(datos_credito, resultado_prediccion)
+    pdf_bytes = crear_reporte(datos_aparte, datos_credito, resultado_prediccion)
 
     col_cerrar, col_imprimir = st.columns(2)
     with col_cerrar:
@@ -28,14 +32,15 @@ def modal_prediccion(d):
         st.download_button(
             "Imprimir reporte",
             data=pdf_bytes,
-            file_name=f"reporte-credito-{datos_credito["nombre_cliente"]}.pdf",
+            file_name=f"reporte-credito-{datos_aparte["nombre_cliente"]}.pdf",
             mime="application/pdf",
             use_container_width=True
         )
         pass
-
-datos_credito = {
+datos_aparte = {
     "imagen_cliente": None,
+}
+datos_credito = {
     "loan_status": 0
 }
 
@@ -45,7 +50,7 @@ with st.container(border=True):
     ---
     """
     # Nombre del cliente
-    datos_credito["nombre_cliente"] = st.text_input(
+    datos_aparte["nombre_cliente"] = st.text_input(
         "Escribe el nombre del cliente",
         placeholder="Ingrese el nombre",
         help="El nombre de quien solicita el crédito"
@@ -58,10 +63,10 @@ with st.container(border=True):
         type=["png", "jpg", "jpeg"]
     )
     if(imagen_uploader is not None):
-        datos_credito["imagen_cliente"] = imagen_uploader.read()
+        datos_aparte["imagen_cliente"] = imagen_uploader.read()
     default_profile_img = "https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg"
     col_nombre.image(
-        datos_credito["imagen_cliente"] if(datos_credito["imagen_cliente"] is not None) else default_profile_img,
+        datos_aparte["imagen_cliente"] if(datos_aparte["imagen_cliente"] is not None) else default_profile_img,
         width = 120
     )
 
@@ -174,9 +179,9 @@ with st.container(border=True):
         )
     if st.button("Enviar", use_container_width=True):
         if (
-            len(datos_credito["nombre_cliente"].strip()) == 0 or \
-            "imagen_cliente" not in datos_credito
+            len(datos_aparte["nombre_cliente"].strip()) == 0 or \
+            datos_aparte["imagen_cliente"] is None
         ):
             st.error("Falta completar los datos del formulario")
         else:
-            modal_prediccion(datos_credito)
+            modal_prediccion(datos_aparte, datos_credito)
