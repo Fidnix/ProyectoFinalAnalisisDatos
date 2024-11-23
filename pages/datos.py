@@ -40,12 +40,16 @@ def cambiar_numero_sesion():
     st.session_state.numero_datos = st.session_state.input_number
 def cambiar_full_dataset_sesion():
     st.session_state.full_dataset = st.session_state.input_full_dataset
+def cambiar_outliers_sesion():
+    st.session_state.outliers = st.session_state.input_outliers
 
 # Inicialización de sesión
 if "numero_datos" not in st.session_state:
     st.session_state.numero_datos = 10_000
 if "full_dataset" not in st.session_state:
     st.session_state.full_dataset = False
+if "outliers" not in st.session_state:
+    st.session_state.outliers = True
 
 # Maquetación del contenedor de configuración
 with st.container(border=True):
@@ -57,6 +61,13 @@ with st.container(border=True):
             value=st.session_state.full_dataset,
             help="Usar todo el dataset. Usar esta opción solo cuando se tenga buena computación y se requiera analizar los datos sin márgenes de error",
             on_change=cambiar_full_dataset_sesion
+        )
+        st.checkbox(
+            "Habilitar outliers",
+            key="input_outliers",
+            value=st.session_state.outliers,
+            help="Ignorar los registros con outliers",
+            on_change=cambiar_outliers_sesion
         )
     with columnas_configuracion[1]:
         print(st.session_state.numero_datos)
