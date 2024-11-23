@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import plotly.graph_objects as go
 import plotly.express as px
 import streamlit as st
 
@@ -21,6 +22,12 @@ def obtener_df(path, full_dataset=False, subsize = 10_000):
     df["person_home_ownership"] = df["person_home_ownership"].astype("category")
     df["loan_grade"] = df["loan_grade"].astype("category")
     df["cb_person_default_on_file"] = df["cb_person_default_on_file"].astype("category")
+    df["loan_status_cat"] = df['loan_status'].map({0: 'cumplido', 1: 'moroso'})
+    bins = np.linspace(18,100,6).round(2) # Límite de edades
+    labels = ['muy joven', 'joven', 'maso', 'viejo', 'muy viejo']
+
+    # Crear la nueva columna categórica
+    df['edades'] = pd.cut(df['person_age'], bins=bins, labels=labels, right=False)
     return df
 
 # @st.cache_data(show_spinner="Estilisando datos")
@@ -153,7 +160,7 @@ with st_columnas_pie[0]:
 
 with st_columnas_pie[1]:
     "## Grado del crédito"
-    loan_grade_df = df['loan_grade'].value_counts().reset_index()
+    loan_grade_df = df.loc[df["loan_status"]==1,'loan_grade'].value_counts().reset_index()
     loan_grade_df.columns = ["grade", "count"]
     fig = px.pie(loan_grade_df, values="count", names='grade', hole=.5)
     st.plotly_chart(fig)
@@ -181,3 +188,113 @@ st.plotly_chart(fig)
 "# Gráfico de Tipo de residencia vs Cantidad solicitada de crédito e Ingresos anuales"
 st.bar_chart(df, x="person_home_ownership", y=["person_income", "loan_amnt"], horizontal=True, x_label="Tipo de residencia", y_label="Count")
 
+# =========================================
+
+# fig = go.Figure()
+# fig.add_trace(go.Bar(
+#     x=months,
+#     y=[20, 14, 25, 16, 18, 22, 19, 15, 12, 16, 14, 17],
+#     name='Primary Product',
+#     marker_color='indianred'
+# ))
+# fig.add_trace(go.Bar(
+#     x=months,
+#     y=[19, 14, 22, 14, 16, 19, 15, 14, 10, 12, 12, 16],
+#     name='Secondary Product',
+#     marker_color='lightsalmon'
+# ))
+
+# # Here we modify the tickangle of the xaxis, resulting in rotated labels.
+# fig.update_layout(barmode='group', xaxis_tickangle=-45)
+# fig.show()
+
+fig=px.bar(
+    df.loc[df["loan_status"]==1,:].groupby(['loan_grade', "person_home_ownership"]).size().reset_index(name='count'),
+    x="loan_grade",
+    y="count",
+    color="person_home_ownership",
+    barmode="group",
+    labels={'loan_status': 'Estado del crédito', 'count': 'Conteo', 'loan_intent': 'Intención de crédito'}
+)
+st.plotly_chart(fig)
+
+
+fig=px.bar(
+    df.loc[df["loan_status"]==0,:].groupby(['loan_grade', "person_home_ownership"]).size().reset_index(name='count'),
+    x="loan_grade",
+    y="count",
+    color="person_home_ownership",
+    barmode="group",
+    labels={'loan_status': 'Estado del crédito', 'count': 'Conteo', 'loan_intent': 'Intención de crédito'}
+)
+st.plotly_chart(fig)
+
+"## OTro grafico"
+
+fig=px.bar(
+df.loc[df["loan_status"]==1,:].groupby(['person_home_ownership']).size().reset_index(name='count'),
+    x="person_home_ownership",
+    y="count",
+    barmode="group",
+    labels={'loan_status': 'Estado del crédito', 'count': 'Conteo', 'loan_intent': 'Intención de crédito'}
+)
+st.plotly_chart(fig)
+
+"## asdazdasd"
+
+columnas_nose = st.columns(2)
+
+with columnas_nose[0]:
+    "## Loan status == 0"
+    fig=px.histogram(
+        df[df["loan_status"]==0],
+        x="loan_percent_income",
+        nbins=100,
+        opacity=.7
+    )
+    st.plotly_chart(fig)
+with columnas_nose[1]:
+    "## Loan status == 1"
+    fig=px.histogram(
+        df[df["loan_status"]==1],
+        x="loan_percent_income",
+        nbins=100,
+        opacity=.7
+    )
+    st.plotly_chart(fig)
+
+fig=px.histogram(
+    df,
+    x="loan_percent_income",
+    nbins=100,
+    color="loan_status",
+    barmode="overlay",
+    opacity=.7
+)
+st.plotly_chart(fig)
+
+"## Otras cosas"
+
+fig=px.bar(
+    df.groupby(['loan_grade', "loan_status_cat"]).size().reset_index(name='count'),
+    x="loan_grade",
+    y="count",
+    color="loan_status_cat",
+    barmode="group",
+    labels={'loan_status': 'Estado del crédito', 'count': 'Conteo', 'loan_intent': 'Intención de crédito'}
+)
+st.plotly_chart(fig)
+
+# TODO: Filtro de edades mediante tags
+
+fig=px.bar(
+    df.groupby(['edades', "loan_status_cat"]).size().reset_index(name='count'),
+    x="edades",
+    y="count",
+    color="loan_status_cat",
+    barmode="group",
+    labels={'loan_status': 'Estado del crédito', 'count': 'Conteo', 'loan_intent': 'Intención de crédito'}
+)
+st.plotly_chart(fig)
+
+st.dataframe(df.groupby(["cb_person_default_on_file", "loan_status_cat"]).size())
