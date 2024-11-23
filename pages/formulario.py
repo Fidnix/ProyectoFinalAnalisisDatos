@@ -158,19 +158,26 @@ with st.container(border=True):
         )
 
         # loan_int_rate
-        "El radio de interés asociado al crédito"
+        datos_credito["loan_int_rate"] = st.number_input(
+            "Tasa de interés asociada al préstamo",
+            min_value=0.,
+            max_value=100.,
+            value=6.,
+            step=0.5,
+            placeholder="Ingrese la tasa de interés asociado al crédito",
+            help="Es un porcentaje"
+        )
 
         # loan_percent_income
         "Porcentaje de crédito respecto a ingreso"
 
     with st.container():
         # cb_person_default_on_file
-        "Y/N"
-        datos_credito["cb_person_default_on_file"] = st.checkbox("Yes/No")
+        datos_credito["cb_person_default_on_file"] = st.checkbox("El cliente tiene un historial de incumplimientos del solicitante según los registros de las agencias de crédito")
         # cb_person_cred_hist_length
         # "Longitud del historial crediticio del individuo"
         datos_credito["cb_person_cred_hist_length"] = st.number_input(
-            "Ingrese total de años de actividad de créditos del individuo",
+            "Longitud del historial crediticio del solicitante",
             min_value=0,
             max_value=100,
             value=1,
