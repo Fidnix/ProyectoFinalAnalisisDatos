@@ -2,6 +2,11 @@ import streamlit as st
 from utils.crear_reporte import crear_reporte
 import numpy as np
 
+st.set_page_config(
+    page_title="Formulario",
+    layout="centered"
+)
+
 # Modal para mostrar los resultados de la prediccion
 @st.cache_data
 def obtener_prediccion(datos_creditos):
