@@ -106,7 +106,7 @@ with columnas_tablas[1]:
     st.dataframe(df.describe(include=['category']))
 
 # Vista de datos personales
-columnas_persona = st.columns(2)
+columnas_persona = st.columns(2, gap="large")
 with columnas_persona[0]:
     "## Gráfico Tipo de residencia vs Estado de aprobación"
     fig=px.bar(
@@ -158,3 +158,15 @@ with st_columnas_pie[2]:
 # Vista re relación entre ingreso de la persona y el total de crédito que solicita
 # rel_income_amnt = pd.cut(df["person_income"], bins=40).value_counts()
 # st.scatter_chart(df, x="person_income", y="loan_amnt")
+"## Gráfico de Tipo de residencia vs relación de crédito - ingreso"
+
+fig = px.box(
+        df,
+        x="person_home_ownership", y="loan_percent_income",
+        labels={'person_home_ownership': 'Tipo de residencia', 'loan_percent_income': 'Relación crédito - Ingresos'}
+    )
+st.plotly_chart(fig)
+
+"# Gráfico de Tipo de residencia vs Cantidad solicitada de crédito e Ingresos anuales"
+st.bar_chart(df, x="person_home_ownership", y=["person_income", "loan_amnt"], horizontal=True, x_label="Tipo de residencia", y_label="Count")
+
