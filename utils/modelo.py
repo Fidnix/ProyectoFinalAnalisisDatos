@@ -1,5 +1,6 @@
 import pickle
 import streamlit as st
+import xgboost
 
 @st.cache_data
 def obtener_modelo(path):
@@ -7,7 +8,7 @@ def obtener_modelo(path):
 
 # Espacio de pruebas
 if __name__ == "__main__":
-    modelo = obtener_modelo("modelo.sav")
+    modelo = obtener_modelo("model.sav")
     
     arr = [
         [25.0, 58000.0, 0.0, 8.0, 2.0, 2.0, 17500.0, 13.11, 0.3, 1.0, 4.0],
