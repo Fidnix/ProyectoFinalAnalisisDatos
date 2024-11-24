@@ -1,17 +1,16 @@
 import streamlit as st
 from utils.crear_reporte import crear_reporte
-import numpy as np
+from utils.obtener_data import obtener_df
+from utils.modelo import obtener_modelo
 
 st.set_page_config(
     page_title="Formulario",
     layout="centered"
 )
 
-# Modal para mostrar los resultados de la prediccion
-@st.cache_data
-def obtener_prediccion(datos_creditos):
-    return np.random.randn() > 0.5
+_, ord_encs = obtener_df("data/credit_risk_dataset.csv", st.session_state.full_dataset, st.session_state.numero_datos)
 
+# Modal para mostrar los resultados de la prediccion
 @st.dialog("Resultados de predicción")
 def modal_prediccion(datos_aparte, datos_credito):
     st.title(datos_aparte["nombre_cliente"])
@@ -20,8 +19,14 @@ def modal_prediccion(datos_aparte, datos_credito):
         width = 120
     )
 
-    # Evaluacion por el modelo (Por cambiar)
-    resultado_prediccion = obtener_prediccion(datos_credito)
+    datos_predecir = datos_credito.copy()
+    datos_predecir["cb_person_default_on_file"] = "Y" if datos_predecir["cb_person_default_on_file"] else "N"
+    for col, ord_ in ord_encs.items():
+        datos_predecir[col] = ord_.transform([[datos_predecir[col]]])[0,0]
+
+    # Evaluacion por el modelo
+    modelo = obtener_modelo("utils/model.sav")
+    resultado_prediccion = modelo.predict([list(datos_predecir.values())])[0] == 0
     if resultado_prediccion:
         st.success("El cliente es apto para el crédito")
     else:
