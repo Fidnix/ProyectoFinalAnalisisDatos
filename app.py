@@ -1,9 +1,14 @@
 import streamlit as st
 
-# IMPORANTE
-# Este archivo es para configurar la navegación en el sitio web, usa "pages" para guardar archivos .py
-# Y configura nuevas páginas en pages.toml
+# Inicialización de datos de sesión
+if "numero_datos" not in st.session_state:
+    st.session_state.numero_datos = 10_000
+if "full_dataset" not in st.session_state:
+    st.session_state.full_dataset = False
+if "outliers" not in st.session_state:
+    st.session_state.outliers = True
 
+# Navegación
 pages = [
     st.Page("pages/principal.py", title="Gráficos principales", default=True),
     st.Page("pages/formulario.py", title="Formulario"),
