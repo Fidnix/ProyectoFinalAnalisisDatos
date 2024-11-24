@@ -193,27 +193,21 @@ with columnas_persona[1]:
     st.plotly_chart(fig)
 
 # Vista de datos categóricos del crédito
-st_columnas_pie = st.columns(3)
+
+"## Gráficos de pie respecto al cumplimiento de un crédito"
+st_columnas_pie = st.columns(2)
 with st_columnas_pie[0]:
-    "## Intención del crédito"
+    "### Intención del crédito"
     loan_intent_df = df['loan_intent'].value_counts().reset_index()
     loan_intent_df.columns = ["intent", "count"]
     fig = px.pie(loan_intent_df, values="count", names='intent', hole=.5)
     st.plotly_chart(fig)
 
 with st_columnas_pie[1]:
-    "## Grado del crédito"
+    "### Grado del crédito"
     loan_grade_df = df.loc[df["loan_status"]==1,'loan_grade'].value_counts().reset_index()
     loan_grade_df.columns = ["grade", "count"]
     fig = px.pie(loan_grade_df, values="count", names='grade', hole=.5)
-    st.plotly_chart(fig)
-
-with st_columnas_pie[2]:
-    "## Estado del crédito"
-    loan_status_df = df['loan_status'].value_counts().reset_index()
-    loan_status_df.columns = ["status", "count"]
-    loan_status_df['status'] = loan_status_df['status'].map({0: "Rechazado", 1: "Aprobado"})
-    fig = px.pie(loan_status_df, values="count", names='status', hole=.5)
     st.plotly_chart(fig)
 
 # Grado de crédito vs Residencia
