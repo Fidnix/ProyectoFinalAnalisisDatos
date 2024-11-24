@@ -2,12 +2,12 @@ import pickle
 import streamlit as st
 
 @st.cache_data
-def obtener_modelo():
-    return pickle.load(open("model.sav", "rb"))
+def obtener_modelo(path):
+    return pickle.load(open(path, "rb"))
 
 # Espacio de pruebas
 if __name__ == "__main__":
-    modelo = obtener_modelo()
+    modelo = obtener_modelo("modelo.sav")
     
     arr = [
         [25.0, 58000.0, 0.0, 8.0, 2.0, 2.0, 17500.0, 13.11, 0.3, 1.0, 4.0],
