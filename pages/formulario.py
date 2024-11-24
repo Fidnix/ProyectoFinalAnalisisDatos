@@ -19,14 +19,16 @@ def modal_prediccion(datos_aparte, datos_credito):
         width = 120
     )
 
+    # Transformacion de datos a predecir
     datos_predecir = datos_credito.copy()
     datos_predecir["cb_person_default_on_file"] = "Y" if datos_predecir["cb_person_default_on_file"] else "N"
     for col, ord_ in ord_encs.items():
         datos_predecir[col] = ord_.transform([[datos_predecir[col]]])[0,0]
+    datos_predecir = [list(datos_predecir.values())] # Cambiando el tipo de dato a un formato para el modelo
 
     # Evaluacion por el modelo
     modelo = obtener_modelo("utils/model.sav")
-    resultado_prediccion = modelo.predict([list(datos_predecir.values())])[0] == 0
+    resultado_prediccion = modelo.predict(datos_predecir)[0] == 0
     if resultado_prediccion:
         st.success("El cliente es apto para el crédito")
     else:
@@ -51,7 +53,17 @@ datos_aparte = {
     "imagen_cliente": None,
 }
 datos_credito = {
-    "loan_status": 0
+    "person_age": 18,
+    "person_income": 1000.,
+    "person_home_ownership": "OTHER",
+    "person_emp_length": 1,
+    "loan_intent": "PERSONAL",
+    "loan_grade": "A",
+    "loan_amnt": 250,
+    "loan_int_rate": 6.,
+    "loan_percent_income": 1/4,
+    "cb_person_default_on_file": False,
+    "cb_person_cred_hist_length": 1
 }
 
 with st.container(border=True):
@@ -146,7 +158,7 @@ with st.container(border=True):
 
         # loan_grade
         # "Grado de creditaje basado en el historial crediticio del solicitante"
-        opciones_grados = [chr(i) for i in range(65, 72)]
+        opciones_grados = ord_encs["loan_grade"].categories_[0]
         datos_credito["loan_grade"] = st.selectbox(
             "Grado de creditaje basado en el historial crediticio del solicitante",
             opciones_grados,
@@ -175,11 +187,18 @@ with st.container(border=True):
             value=6.,
             step=0.5,
             placeholder="Ingrese la tasa de interés asociado al crédito",
-            help="Es un porcentaje"
+            help="Es un porcentaje (%)"
         )
 
         # loan_percent_income
-        "Porcentaje de crédito respecto a ingreso"
+        datos_credito["loan_percent_income"] = st.number_input(
+            "Porcentaje de crédito respecto a ingreso",
+            min_value=0.,
+            max_value=100_000.,
+            value=datos_credito["loan_amnt"]/datos_credito["person_income"],
+            disabled=True,
+            help="Es un porcentaje (%). El valor se da por cálculo automático, el usuario no lo registra"
+        )
 
     with st.container():
         # cb_person_default_on_file
@@ -194,6 +213,10 @@ with st.container(border=True):
             placeholder="Ingrese el total de años del historial crediticio",
             help="Sobre los años del historial crediticio: "
         )
+
+    if datos_credito["loan_percent_income"] > 1.:
+        st.warning("Los ingresos anuales del cliente no superan la cantidad solicitada de dinero. Puede ser riesgoso para ambas partes")
+
     if st.button("Enviar", use_container_width=True):
         if (
             len(datos_aparte["nombre_cliente"].strip()) == 0 or \
