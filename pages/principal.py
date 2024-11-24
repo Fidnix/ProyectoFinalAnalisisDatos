@@ -1,9 +1,8 @@
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
 import plotly.express as px
-from plotly.subplots import make_subplots
 import streamlit as st
+import matplotlib.pyplot as plt
 
 # COnfiguración de página
 st.set_page_config(
@@ -107,14 +106,12 @@ df = obtener_df("data/credit_risk_dataset.csv", st.session_state.full_dataset, s
 # ==========================================
 
 "# Estimación de ingresos por créditos"
-
 seleccion_ganancias_grade = st.pills(
     "Seleccione los grados",
-    options=df["loan_grade"].unique(),
+    options=np.sort(df["loan_grade"].unique()),
     default=df["loan_grade"].unique(),
     selection_mode="multi"
 )
-
 intereses_generados_no_morosos = ((df.loc[(df["loan_grade"].isin(seleccion_ganancias_grade)) & (df["loan_status"]  ==  0),"loan_int_rate"]/100 + 1) * df["loan_amnt"]).sum()
 intereses_generados_morosos = ((df.loc[(df["loan_grade"].isin(seleccion_ganancias_grade)) & (df["loan_status"]  ==  1),"loan_int_rate"]/100 + 1) * df["loan_amnt"]).sum()
 
@@ -122,49 +119,40 @@ columnas_ingresos = st.columns(2)
 
 with columnas_ingresos[0].container(border=True):
     "## Ganancias estimadas"
-    f"### ${intereses_generados_no_morosos:,.{2}f}"
+    f"### :green[${intereses_generados_no_morosos:,.{2}f}]"
 
 with columnas_ingresos[1].container(border=True):
     "## Pérdidas estimadas"
-    f"### -${intereses_generados_morosos:,.{2}f}"
+    f"### :red[${-1*intereses_generados_morosos:,.{2}f}]"
 
 with st.container(border=True):
     "## Neto estimado"
-    f"### ${intereses_generados_no_morosos - intereses_generados_morosos:,.{2}f}"
+    neto = intereses_generados_no_morosos - intereses_generados_morosos
+    st.write(f"### :{'green' if neto >= 0 else 'red'}[${neto:,.{2}f}]")
 
 # Matriz de confusión para historial
 
-# grouped = df.groupby(["cb_person_default_on_file", "loan_status_cat"]).size().reset_index(name="count")
+grouped = np.array( df.groupby(["cb_person_default_on_file", "loan_status_cat"]).size().reset_index(name="count")["count"] ).reshape((2,2))
 
-# table_2x2 = pd.pivot_table(
-#     grouped,
-#     values="count",
-#     index="cb_person_default_on_file",  # Filas
-#     columns="loan_status_cat",          # Columnas
-#     fill_value=0                        # Rellenar valores nulos con 0
-# )
-# fig = make_subplots(
-#     rows=1, cols=1,
-#     shared_xaxes=True,
-#     vertical_spacing=0.03,
-#     specs=[[{"type": "table"}],
-# )
+fig = plt.figure(figsize=(2, 2))
+plt.imshow(grouped, interpolation='nearest')
+plt.title('Matriz', fontsize=16)
+plt.colorbar()
+classes = ['Pagado a tiempo', 'Pagado con retraso']  # Cambiar según tus clases
+tick_marks = np.arange(len(classes))
+plt.xticks(tick_marks, classes, rotation=45)
+plt.yticks(tick_marks, classes)
+thresh = grouped.max() / 2.0
+for i, j in np.ndindex(grouped.shape):
+    plt.text(j, i, f'{grouped[i, j]}',
+        horizontalalignment="center",
+        color="white" if grouped[i, j] < thresh else "black")
+plt.ylabel('Historial crediticio', fontsize=14)
+plt.xlabel('Crédito actual', fontsize=14)
+plt.tight_layout()
+plt.show()
 
-# # Mostrar como gráfico en Plotly
-# fig = go.Figure(data=[go.Table(
-#     header=dict(
-#         values=[""] + table_2x2.columns.tolist(),  # Etiquetas de columnas
-#         fill_color="lightgrey",
-#         align="center"
-#     ),
-#     cells=dict(
-#         values=[table_2x2.index] + [table_2x2[col] for col in table_2x2.columns],  # Datos por columna
-#         fill_color="white",
-#         align="center"
-#     )
-# )])
-
-# st.plotly_chart(fig)
+st.pyplot(fig,use_container_width=False)
 
 # Vista de datos personales
 columnas_persona = st.columns(2, gap="large")
