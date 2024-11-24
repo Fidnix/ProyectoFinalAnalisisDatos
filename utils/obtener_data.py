@@ -21,5 +21,5 @@ def obtener_df(path, full_dataset=False, subsize = 10_000):
     df["loan_status_cat"] = df['loan_status'].map({0: 'cumplido', 1: 'moroso'})
     df['edades'] = cut(df['person_age'], bins=bins, labels=labels, right=False)
 
-    ord_encs = { col: OrdinalEncoder().fit(df[col]) for col in ['person_home_ownership', 'loan_intent', 'loan_grade', 'cb_person_default_on_file']}
+    ord_encs = { col: OrdinalEncoder().fit(df[[col]]) for col in ['person_home_ownership', 'loan_intent', 'loan_grade', 'cb_person_default_on_file']}
     return df, ord_encs
