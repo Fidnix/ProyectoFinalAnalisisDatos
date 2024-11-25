@@ -69,6 +69,7 @@ def modal_prediccion_csv(df_salida):
             data=buffer_csv.getvalue(),
             file_name="resultados.csv",
             mime="text/csv",
+            icon=":material/csv:",
             use_container_width=True
         )
     with columnas_descargas[1]:
@@ -77,6 +78,7 @@ def modal_prediccion_csv(df_salida):
             data=buffer_pdf,
             file_name="resultados.pdf",
             mime="application/pdf",
+            icon=":material/description:",
             use_container_width=True
         )
 
@@ -294,5 +296,6 @@ with st.container(border=True):
             data=buffer_ejemplo.getvalue(),
             file_name="ejemplo.csv",
             mime="text/csv",
+            icon=":material/csv:",
             use_container_width=True
         )
