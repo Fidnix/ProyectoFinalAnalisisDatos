@@ -93,14 +93,14 @@ Los venv, también llamados ambientes virtuales permiten aislar la versión de p
 
 * data: Almacena los datos que se usarán en el proyecto
 * pages: Directorio con páginas en extesnión .py. Ahí se encuentran las páginas de streamlit
-    * datos.py: Para dar un vistazo a los datos actuales
-    * visual.py: Aun no tiene propósito claro, pero se relacionará con el modelo final
-    * formulario.py: Archivo para predecir el resultado de un registro, permitirá imprimir el resultado
+    * principal.py: Dashboard
+    * formulario.py: Página para predecir el resultado de un registro, permitirá imprimir el resultado
 * utils: Tiene métodos para usar dentro de pages
     * crear_reporte: Permite crear el resporte necesario para formulario.py
 * app.py: Es el archivo principal que ejecuta la navegación de las páginas
 * .gitignore: Ignora ciertos archivos innecesarios como archivos de cache
 * requirements.txt: Contiene las librerías necesarias para el proyecto
+* tests: Módulo para pruebas
 * README.md: Lo estás leyendo capo
 
 # Cómo contribuir

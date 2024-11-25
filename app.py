@@ -10,8 +10,9 @@ if "outliers" not in st.session_state:
 
 # Navegación
 pages = [
-    st.Page("pages/principal.py", title="Gráficos principales", default=True),
-    st.Page("pages/formulario.py", title="Formulario"),
+    st.Page("pages/principal.py", title="Gráficos principales", default=True, icon="📊"),
+    st.Page("pages/formulario.py", title="Formulario", icon="📃"),
+    st.Page("pages/intro.py", title="Integrantes", icon="🧑"),
 ]
 
 pg = st.navigation(pages)

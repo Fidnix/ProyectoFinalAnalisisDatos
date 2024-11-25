@@ -99,11 +99,11 @@ datos_credito = {
     "cb_person_cred_hist_length": 1
 }
 
+"""
+# Formulario
+---
+"""
 with st.container(border=True):
-    """
-    # Formulario
-    ---
-    """
     # Nombre del cliente
     datos_aparte["nombre_cliente"] = st.text_input(
         "Escribe el nombre del cliente",
@@ -166,7 +166,7 @@ with st.container(border=True):
             min_value=0,
             max_value=140,
             value=1,
-            placeholder="Ingrese el total de años que el invididuo trabaja",
+            placeholder="Ingrese el tcontentotal de años que el invididuo trabaja",
             help="Sobre los años de actividad laboral: "
         )
 
@@ -259,8 +259,11 @@ with st.container(border=True):
         else:
             modal_prediccion(datos_aparte, datos_credito)
 
+"""
+# Enviar csv
+---
+"""
 with st.container(border=True):
-    "# Enviar csv\n---"
 
     archivo_csv = st.file_uploader(
         "Archivo csv",
