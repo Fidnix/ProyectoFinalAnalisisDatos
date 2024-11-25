@@ -1,5 +1,7 @@
+import io
+import pandas as pd
 import streamlit as st
-from utils.crear_reporte import crear_reporte
+from utils.crear_reporte import crear_reporte, crear_reporte_tabla
 from utils.obtener_data import obtener_df
 from utils.modelo import obtener_modelo
 
@@ -8,7 +10,7 @@ st.set_page_config(
     layout="centered"
 )
 
-_, ord_encs = obtener_df("data/credit_risk_dataset.csv", st.session_state.full_dataset, st.session_state.numero_datos)
+df, ord_encs = obtener_df("data/credit_risk_dataset.csv", st.session_state.full_dataset, st.session_state.numero_datos)
 
 # Modal para mostrar los resultados de la prediccion
 @st.dialog("Resultados de predicción")
@@ -48,7 +50,36 @@ def modal_prediccion(datos_aparte, datos_credito):
             mime="application/pdf",
             use_container_width=True
         )
-        pass
+
+@st.dialog("Resultados de predicción de csv")
+def modal_prediccion_csv(df_salida):
+    # Escritura csv
+    buffer_csv = io.StringIO()
+    df_salida.to_csv(buffer_csv, index=False)
+    buffer_csv.seek(0)
+
+    # Escritura pdf
+    buffer_pdf = crear_reporte_tabla(df_salida)
+
+    st.dataframe(df_salida)
+    columnas_descargas = st.columns(2)
+    with columnas_descargas[0]:
+        st.download_button(
+            "Descargar resultados en csv",
+            data=buffer.getvalue(),
+            file_name="resultados.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
+    with columnas_descargas[1]:
+        st.download_button(
+            "Descargar resultados en pdf",
+            data=buffer_pdf,
+            file_name="resultados.pdf",
+            mime="application/pdf",
+            use_container_width=True
+        )
+
 datos_aparte = {
     "imagen_cliente": None,
 }
@@ -225,3 +256,43 @@ with st.container(border=True):
             st.error("Falta completar los datos del formulario")
         else:
             modal_prediccion(datos_aparte, datos_credito)
+
+with st.container(border=True):
+    "# Enviar csv\n---"
+
+    archivo_csv = st.file_uploader(
+        "Archivo csv",
+        type="csv"
+    )
+
+    botones_columna = st.columns(2)
+    with botones_columna[0]:
+        if st.button("Enviar", key="Bolivia", use_container_width=True):
+            buffer = io.StringIO()
+            buffer.write(archivo_csv.read().decode("utf-8"))
+            buffer.seek(0)
+            df_prueba = pd.read_csv(buffer)
+
+            df_salida = df_prueba.copy()
+
+            for col, ord_ in ord_encs.items():
+                df_prueba[col] = df_prueba[col].apply(lambda v: ord_.transform([[v]])[0,0])
+                # Prediccion
+            modelo = obtener_modelo("utils/model.sav")
+            valores = modelo.predict(df_prueba)
+
+            df_salida["loan_status"] = pd.Series(valores)
+            modal_prediccion_csv(df_salida)
+    with botones_columna[1]:
+        buffer = io.StringIO()
+        df.drop(["loan_status", "loan_status_cat", "edades"], axis=1).sample(200).to_csv(buffer, index=False)
+        buffer.seek(0)
+
+
+        st.download_button(
+            "Descargar archivo de prueba",
+            data=buffer.getvalue(),
+            file_name="ejemplo.csv",
+            mime="text/csv",
+            use_container_width=True
+        )

@@ -1,15 +1,13 @@
 from sklearn.preprocessing import OrdinalEncoder
-from pandas import read_csv, set_option, cut
+from pandas import read_csv, cut
 import streamlit as st
 from numpy import linspace
 
 @st.cache_data
 def obtener_df(path, full_dataset=False, subsize = 10_000):
-    set_option("styler.render.max_elements", 390972)
     df = read_csv(path)
     if not full_dataset:
-        df = df.sample(subsize).reset_index()
-        df = df.drop("index", axis=1)
+        df = df.sample(subsize).reset_index().drop("index",axis=1)
     df["loan_intent"] = df["loan_intent"].astype("category")
     df["person_home_ownership"] = df["person_home_ownership"].astype("category")
     df["loan_grade"] = df["loan_grade"].astype("category")

@@ -78,3 +78,34 @@ Ingrese total de años de actividad de créditos del individuo: {datos_credito["
     pdf_buffer = io.BytesIO(pdf_bytes)
 
     return pdf_buffer
+
+def crear_reporte_tabla(df):
+    # Crear una instancia de FPDF
+    pdf = FPDF(orientation="L", unit="mm", format="A4")
+    pdf.set_auto_page_break(auto=True, margin=15)
+    pdf.add_page()
+    pdf.set_font("Arial", size=10)
+    
+    # Título del reporte
+    pdf.set_font("Arial", style="B", size=12)
+    pdf.cell(200, 10, txt="Reporte de Datos", ln=True, align="C")
+    pdf.ln(10)
+    
+    # Encabezados de las columnas
+    pdf.set_font("Arial", style="B", size=10)
+    for columna in df.columns.tolist():
+        pdf.cell(22, 10, txt=columna.replace("_", "\n").replace("person", "").replace("ownership", "").strip(), border=1, align="C")
+    pdf.ln()
+    
+    # Contenido del DataFrame
+    pdf.set_font("Arial", size=10)
+    for _, fila in df.iterrows():
+        for columna in df.columns.tolist():
+            pdf.cell(22, 10, txt=str(fila[columna]), border=1, align="C")
+        pdf.ln()
+    
+    # Guardar el PDF
+    pdf_bytes = pdf.output(dest='S')
+    pdf_buffer = io.BytesIO(pdf_bytes)
+
+    return pdf_buffer
