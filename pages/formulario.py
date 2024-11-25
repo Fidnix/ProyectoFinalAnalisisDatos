@@ -32,6 +32,7 @@ def modal_prediccion(datos_aparte, datos_credito):
     modelo = obtener_modelo("utils/model.sav")
     resultado_prediccion = modelo.predict(datos_predecir)[0] == 0
     if resultado_prediccion:
+        st.balloons()
         st.success("El cliente es apto para el crédito")
     else:
         st.error("El cliente no es apto para el crédito")
