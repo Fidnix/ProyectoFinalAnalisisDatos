@@ -23,7 +23,7 @@ plot_labels = {
 
 # Título
 """
-# Vista principal de los datos
+# Dashboard riesgo de crédito 💸
 ---
 """
 
