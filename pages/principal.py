@@ -269,3 +269,51 @@ fig = px.bar(
     title="Morosos por Rango de Edad"
 )
 st.plotly_chart(fig)
+
+# ==========================================
+# Parte de Javier
+# ==========================================
+
+"## viviendas por edades"
+fig=px.bar(
+    df.groupby(['edades', 'person_home_ownership']).size().reset_index(name='count'),
+    x="edades",
+    y="count",
+    color="person_home_ownership",
+    barmode="group",
+    labels={'loan_status': 'Estado del crédito', 'count': 'Conteo', 'loan_intent': 'Intención de crédito'}
+)
+st.plotly_chart(fig)
+
+"## Viviendas por credito aprobado"
+fig=px.bar(
+    df.groupby(['person_home_ownership', "loan_status_cat"]).size().reset_index(name='count'),
+    x="person_home_ownership",
+    y="count",
+    color="loan_status_cat",
+    barmode="group",
+    labels={'loan_status': 'Estado del crédito', 'count': 'Conteo', 'loan_intent': 'Intención de crédito'}
+)
+st.plotly_chart(fig)
+
+"## Ingresos por edades"
+fig=px.bar(
+    df.groupby(['edades', 'person_income', "loan_status_cat"]).size().reset_index(name='count'),
+    x="edades",
+    y="count",
+    color="person_income",
+    barmode="group",
+    labels={'loan_status': 'Estado del crédito', 'count': 'Conteo', 'loan_intent': 'Intención de crédito'}
+)
+st.plotly_chart(fig)
+
+"## Ingresos por credito aprobado"
+fig=px.bar(
+    df.groupby(['person_income', "loan_status_cat"]).size().reset_index(name='count'),
+    x="person_income",
+    y="count",
+    color="loan_status_cat",
+    barmode="group",
+    labels={'loan_status': 'Estado del crédito', 'count': 'Conteo', 'loan_intent': 'Intención de crédito'}
+)
+st.plotly_chart(fig)
