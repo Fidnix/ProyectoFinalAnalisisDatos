@@ -28,6 +28,16 @@ def obtener_df(path, full_dataset=False, subsize = 10_000):
 
     # Crear la nueva columna categórica
     df['edades'] = pd.cut(df['person_age'], bins=bins, labels=labels, right=False)
+    
+    # Calcular IQR para filtrar outliers en person_income
+    Q1 = df['person_income'].quantile(0.25)
+    Q3 = df['person_income'].quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+
+    # Filtrar valores dentro del rango intercuartil
+    df = df[(df['person_income'] >= lower_bound) & (df['person_income'] <= upper_bound)]
     return df
 
 # @st.cache_data(show_spinner="Estilisando datos")
