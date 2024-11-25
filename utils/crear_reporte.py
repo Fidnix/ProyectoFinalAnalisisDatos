@@ -87,12 +87,12 @@ def crear_reporte_tabla(df):
     pdf.set_font("Arial", size=10)
     
     # Título del reporte
-    pdf.set_font("Arial", style="B", size=12)
+    pdf.set_font("Arial", style="B", size=10)
     pdf.cell(200, 10, txt="Reporte de Datos", ln=True, align="C")
     pdf.ln(10)
     
     # Encabezados de las columnas
-    pdf.set_font("Arial", style="B", size=10)
+    pdf.set_font("Arial", style="B", size=8)
     for columna in df.columns.tolist():
         pdf.cell(22, 10, txt=columna.replace("_", "\n").replace("person", "").replace("ownership", "").strip(), border=1, align="C")
     pdf.ln()
