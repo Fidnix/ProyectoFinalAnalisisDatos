@@ -51,7 +51,7 @@ def modal_prediccion(datos_aparte, datos_credito):
             use_container_width=True
         )
 
-@st.dialog("Resultados de predicción de csv")
+@st.dialog("Resultados de predicción de csv", width="large")
 def modal_prediccion_csv(df_salida):
     # Escritura csv
     buffer_csv = io.StringIO()
@@ -66,7 +66,7 @@ def modal_prediccion_csv(df_salida):
     with columnas_descargas[0]:
         st.download_button(
             "Descargar resultados en csv",
-            data=buffer.getvalue(),
+            data=buffer_csv.getvalue(),
             file_name="resultados.csv",
             mime="text/csv",
             use_container_width=True
@@ -284,14 +284,14 @@ with st.container(border=True):
             df_salida["loan_status"] = pd.Series(valores)
             modal_prediccion_csv(df_salida)
     with botones_columna[1]:
-        buffer = io.StringIO()
-        df.drop(["loan_status", "loan_status_cat", "edades"], axis=1).sample(200).to_csv(buffer, index=False)
-        buffer.seek(0)
+        buffer_ejemplo = io.StringIO()
+        df.drop(["loan_status", "loan_status_cat", "edades"], axis=1).sample(200).to_csv(buffer_ejemplo, index=False)
+        buffer_ejemplo.seek(0)
 
 
         st.download_button(
             "Descargar archivo de prueba",
-            data=buffer.getvalue(),
+            data=buffer_ejemplo.getvalue(),
             file_name="ejemplo.csv",
             mime="text/csv",
             use_container_width=True
