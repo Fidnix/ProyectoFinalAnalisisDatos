@@ -298,9 +298,16 @@ fig=px.bar(
 )
 st.plotly_chart(fig)
 
+
 "## Ingresos por credito aprobado"
+Q1 = df['person_income'].quantile(0.25)
+Q3 = df['person_income'].quantile(0.75)
+IQR = Q3 - Q1
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
 fig=px.bar(
-    df.groupby(['person_income', "loan_status_cat"]).size().reset_index(name='count'),
+    df[(df['person_income'] >= lower_bound) & (df['person_income'] <= upper_bound)].groupby(['person_income', "loan_status_cat"]).size().reset_index(name='count'),
     x="person_income",
     y="count",
     color="loan_status_cat",
