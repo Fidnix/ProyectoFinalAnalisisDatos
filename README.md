@@ -1,8 +1,6 @@
-# ProyectoFinalAnalisisDatos
+# Dashboard para analizar el riesgo de crédito
 
-Este es un proyecto para el curso de análisis de datos de la PUCP, este proyecto es propiedad del grupo encargado de esto.
-
-Este proyecto es un Dashboard para analizar las características que tienen ciertos atributos que influyen en la decisión de si una persona obtiene un crédito o no.
+Este proyecto es un Dashboard para analizar las características que tienen ciertos atributos que influyen en la decisión de si una persona obtiene un crédito o no; es decir, en cuan riesgosos son.
 
 ## Integrantes
 
@@ -12,6 +10,8 @@ Este proyecto es un Dashboard para analizar las características que tienen cier
 * Fidel Moisés Apari Sánchez (20212126)
 
 [Link al dataset](https://www.kaggle.com/datasets/laotse/credit-risk-dataset)
+
+> [!NOTE] El dataset se encuentra en el repostiorio
 
 # Índice
 
@@ -61,7 +61,7 @@ Los venv, también llamados ambientes virtuales permiten aislar la versión de p
 
 1. Crear el ambiente virtual desde anaconda, la versión de python será 3.12.4:
     ```
-    conda create -n <nombre del ambiente> python=3.12.4 anaconda
+    conda create -n <nombre del ambiente> python=3.12.4
     ```
 
 2. Activar el ambiente virtual
