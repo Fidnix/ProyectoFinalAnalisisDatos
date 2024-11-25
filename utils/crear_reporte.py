@@ -42,7 +42,7 @@ Tiempo de trabajo: {datos_credito["person_emp_length"]} años
 Intención del crédito: {datos_credito["loan_intent"]}
 Grado de creditaje basado en el historial crediticio del solicitante: {datos_credito["loan_grade"]}
 Cantidad de dinero solicitado: {datos_credito["loan_amnt"]}
-El radio de interés asociado al crédito: 
+El interés asociado al crédito: 
 Porcentaje de crédito respecto a ingreso:
 """
     historial_crediticio = f"""
@@ -85,23 +85,42 @@ def crear_reporte_tabla(df):
     pdf.set_auto_page_break(auto=True, margin=15)
     pdf.add_page()
     pdf.set_font("Arial", size=10)
+
+    datos_pdf = {
+        "person_age": ["Edad", 14],
+        "person_income": ["Ingresos", 19],
+        "person_home_ownership": ["Residencia", 24],
+        "person_emp_length": ["Emp.", 12],
+        "loan_intent": ["Motivo", 36],
+        "loan_grade": ["Grado", 14],
+        "loan_amnt": ["Cred.", 17],
+        "loan_int_rate": ["i", 13],
+        "loan_percent_income": ["Rel.", 13],
+        "loan_status": ["Estado", 17],
+        "cb_person_default_on_file": ["Inc. Hist.", 22],
+        "cb_person_cred_hist_length": ["Long hist.", 27]
+    }
     
     # Título del reporte
-    pdf.set_font("Arial", style="B", size=10)
+    pdf.set_font("Arial", style="B", size=12)
     pdf.cell(200, 10, txt="Reporte de Datos", ln=True, align="C")
     pdf.ln(10)
     
     # Encabezados de las columnas
-    pdf.set_font("Arial", style="B", size=8)
+    pdf.set_font("Arial", style="B", size=10)
     for columna in df.columns.tolist():
-        pdf.cell(22, 10, txt=columna.replace("_", "\n").replace("person", "").replace("ownership", "").strip(), border=1, align="C")
+        pdf.cell(datos_pdf[columna][1], 10, txt=datos_pdf[columna][0], border=1, align="C")
     pdf.ln()
     
     # Contenido del DataFrame
-    pdf.set_font("Arial", size=10)
+    pdf.set_font("Arial", size=8)
     for _, fila in df.iterrows():
+        if fila["loan_status"] == 0:
+            pdf.set_fill_color(147, 235, 146)
+        else:
+            pdf.set_fill_color(233, 153, 135)
         for columna in df.columns.tolist():
-            pdf.cell(22, 10, txt=str(fila[columna]), border=1, align="C")
+            pdf.cell(datos_pdf[columna][1], 10, txt=str(fila[columna]), border=1, align="C", fill=True)
         pdf.ln()
     
     # Guardar el PDF
